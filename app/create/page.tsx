@@ -10,6 +10,7 @@ export default function CreatePage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [result, setResult] = useState<{ status: "healthy" | "diseased"; message: string } | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const cameraInputRef = useRef<HTMLInputElement>(null)
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -42,16 +43,17 @@ export default function CreatePage() {
     setImage(null)
     setResult(null)
     if (fileInputRef.current) fileInputRef.current.value = ""
+    if (cameraInputRef.current) cameraInputRef.current.value = ""
   }
 
   return (
     <div className="container mx-auto max-w-lg px-4 py-8 md:py-16">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold mb-2">New Detection</h1>
-        <p className="text-zinc-500 dark:text-zinc-400">Upload a clear photo of the affected plant leaf</p>
+        <p className="text-zinc-500 dark:text-zinc-400">Capture or upload a clear photo of the leaf</p>
       </div>
 
-      <div className="relative aspect-square w-full max-w-md mx-auto rounded-3xl border-2 border-dashed border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 flex flex-col items-center justify-center overflow-hidden transition-all group">
+      <div className="relative aspect-square w-full max-w-md mx-auto rounded-3xl border-2 border-dashed border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 flex flex-col items-center justify-center overflow-hidden transition-all group p-4">
         {image ? (
           <div className="relative w-full h-full">
             <img src={image} alt="Upload preview" className="w-full h-full object-cover" />
@@ -63,21 +65,47 @@ export default function CreatePage() {
             </button>
           </div>
         ) : (
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="flex flex-col items-center gap-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform"
-          >
-            <div className="h-20 w-20 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-              <Plus className="h-10 w-10" />
-            </div>
-            <span className="font-semibold text-lg">Click to Upload</span>
-          </button>
+          <div className="flex flex-col gap-6 w-full max-w-[280px]">
+            <button
+              onClick={() => cameraInputRef.current?.click()}
+              className="flex items-center gap-4 p-5 rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:border-emerald-500 hover:text-emerald-500 transition-all active:scale-95 group/btn"
+            >
+              <div className="h-12 w-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover/btn:bg-emerald-500 group-hover/btn:text-white transition-colors">
+                <Camera className="h-6 w-6" />
+              </div>
+              <div className="text-left">
+                <span className="block font-bold">Take Photo</span>
+                <span className="block text-xs text-zinc-500">Use your camera</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center gap-4 p-5 rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:border-emerald-500 hover:text-emerald-500 transition-all active:scale-95 group/btn"
+            >
+              <div className="h-12 w-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 dark:text-zinc-400 group-hover/btn:bg-emerald-500 group-hover/btn:text-white transition-colors">
+                <Upload className="h-6 w-6" />
+              </div>
+              <div className="text-left">
+                <span className="block font-bold">Upload Gallery</span>
+                <span className="block text-xs text-zinc-500">Pick from folder</span>
+              </div>
+            </button>
+          </div>
         )}
         <input
           type="file"
           ref={fileInputRef}
           onChange={handleImageUpload}
           accept="image/*"
+          className="hidden"
+        />
+        <input
+          type="file"
+          ref={cameraInputRef}
+          onChange={handleImageUpload}
+          accept="image/*"
+          capture="environment"
           className="hidden"
         />
       </div>
