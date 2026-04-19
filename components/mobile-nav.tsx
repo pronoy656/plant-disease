@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Plus, Info, Mail, Sun, Moon, Clock } from "lucide-react"
+import { Home, Plus, Info, Mail, Sun, Moon, BookOpen } from "lucide-react"
 import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
 
@@ -12,7 +12,7 @@ export function MobileNav() {
 
   const navItems = [
     { label: "Home", icon: Home, href: "/" },
-    { label: "History", icon: Clock, href: "/history" },
+    { label: "Guide", icon: BookOpen, href: "/guide" },
     { label: "Create", icon: Plus, href: "/create", isSpecial: true },
     { label: "About", icon: Info, href: "/about" },
     { label: "Contact", icon: Mail, href: "/contact" },

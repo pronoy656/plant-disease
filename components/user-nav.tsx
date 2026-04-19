@@ -1,7 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { User, Settings, LogOut, Shield, ChevronDown } from "lucide-react"
+import Link from "next/link"
+import { User, Settings, LogOut, Shield, ChevronDown, Clock } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
 import { cn } from "@/lib/utils"
 
@@ -47,6 +48,14 @@ export function UserNav() {
           </div>
           
           <div className="p-2">
+            <Link 
+              href="/history" 
+              onClick={() => setIsOpen(false)}
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors"
+            >
+              <Clock className="h-4 w-4 text-zinc-500" />
+              <span>Scan History</span>
+            </Link>
             <button className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors">
               <Settings className="h-4 w-4 text-zinc-500" />
               <span>Settings</span>

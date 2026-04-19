@@ -13,7 +13,7 @@ export function Navbar() {
         <div className="flex items-center gap-4 md:gap-8 text-sm font-medium">
           <div className="hidden md:flex items-center gap-8">
             <Link href="/" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Home</Link>
-            <Link href="/history" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">History</Link>
+            <Link href="/guide" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Plant Care Guide</Link>
             <Link href="/create" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Create</Link>
             <Link href="/about" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">About</Link>
             <Link href="/contact" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Contact</Link>
