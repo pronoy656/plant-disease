@@ -18,7 +18,12 @@ import {
   Layers,
   Scissors,
   SearchCheck,
-  Stethoscope
+  Stethoscope,
+  Calendar,
+  RefreshCw,
+  Sparkles,
+  ClipboardCheck,
+  ArrowRight
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -135,44 +140,89 @@ export default function GuidePage() {
     }
   ]
 
-  const healthyGuides = [
+  const healthyPlantSections = [
     {
-      plant: "Tomato",
-      tips: ["Provide 6-8 hours of sun", "Support with cages or stakes", "Water at the base to avoid leaf blight"],
-      image: "https://images.unsplash.com/photo-1592841604418-b58f3cd82104?auto=format&fit=crop&q=80&w=200&h=200"
+      id: "signs",
+      title: "Healthy Plant Signs",
+      emoji: "🌿",
+      icon: Sparkles,
+      color: "emerald",
+      items: [
+        "Green, vibrant leaves",
+        "New leaf growth",
+        "Firm stems and roots"
+      ],
+      description: "Observing these signs regularly ensures your plant is thriving in its current environment."
     },
     {
-      plant: "Snake Plant",
-      tips: ["Low light tolerant", "Water every 2-3 weeks", "Avoid overwatering"],
-      image: "https://images.unsplash.com/photo-1599591037483-34509426c739?auto=format&fit=crop&q=80&w=200&h=200"
+      id: "routine",
+      title: "Routine Care",
+      emoji: "📅",
+      icon: Calendar,
+      color: "blue",
+      items: [
+        "Weekly plant check",
+        "Cleaning leaves regularly",
+        "Consistent light exposure"
+      ],
+      description: "A simple weekly routine is the foundation of long-term plant health."
+    },
+    {
+      id: "repotting",
+      title: "Repotting Guide",
+      emoji: "🔄",
+      icon: RefreshCw,
+      color: "amber",
+      items: [
+        "When to change the pot",
+        "Choose the right soil mix",
+        "Select a pot with drainage"
+      ],
+      description: "Plants eventually outgrow their space. Knowing when to move them is key to growth."
+    },
+    {
+      id: "pruning",
+      title: "Pruning Tips",
+      emoji: "✂️",
+      icon: Scissors,
+      color: "rose",
+      items: [
+        "Remove dry or dead leaves",
+        "Trim leggy stems",
+        "Use clean, sharp tools"
+      ],
+      description: "Pruning encourages new growth and keeps your plant looking its best."
     }
   ]
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 pb-10 font-sans">
       <div className="container mx-auto max-w-5xl px-2 xs:px-4 py-8 md:py-12">
-        {/* Compact Tab Switcher with visible names */}
-        <div className="flex justify-center mb-8 md:mb-12">
-          <div className="bg-zinc-200/50 dark:bg-zinc-800/50 p-1.5 rounded-2xl flex w-full max-w-md shadow-inner">
-            {tabs.map((tab) => {
-              const Icon = tab.icon
-              const isActive = activeTab === tab.id
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as Tab)}
-                  className={cn(
-                    "flex-1 flex items-center justify-center gap-2 py-2.5 sm:py-3 px-3 rounded-xl text-[10px] sm:text-xs md:text-sm font-bold transition-all",
-                    isActive
-                      ? "bg-white dark:bg-zinc-700 text-emerald-600 dark:text-emerald-400 shadow-md transform scale-[1.02]"
-                      : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
-                  )}
-                >
-                  <Icon className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
-                  <span className="whitespace-nowrap">{tab.label}</span>
-                </button>
-              )
-            })}
+        
+        {/* Sticky Tab Switcher Wrapper */}
+        <div className="sticky top-[64px] z-40 bg-zinc-50/80 dark:bg-zinc-950/80 backdrop-blur-md py-4 -mx-2 xs:-mx-4 px-2 xs:px-4 mb-4 md:mb-8 transition-all duration-300">
+          <div className="flex justify-center">
+            <div className="bg-zinc-200/50 dark:bg-zinc-800/50 p-1.5 rounded-2xl flex w-full max-w-md shadow-inner">
+              {tabs.map((tab) => {
+                const Icon = tab.icon
+                const isActive = activeTab === tab.id
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as Tab)}
+                    className={cn(
+                      "flex-1 flex items-center justify-center gap-2 py-2.5 sm:py-3 px-3 rounded-xl text-[10px] sm:text-xs md:text-sm font-bold transition-all",
+                      isActive
+                        ? "bg-white dark:bg-zinc-700 text-emerald-600 dark:text-emerald-400 shadow-md transform scale-[1.02]"
+                        : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                    )}
+                  >
+                    <Icon className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
+                    <span className="whitespace-nowrap">{tab.label}</span>
+                  </button>
+                )
+              })}
+            </div>
           </div>
         </div>
 
@@ -325,37 +375,76 @@ export default function GuidePage() {
           )}
 
           {activeTab === "healthy" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 animate-in fade-in slide-in-from-bottom-8 duration-500">
-              {healthyGuides.map((guide, idx) => (
-                <div
-                  key={idx}
-                  className="overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xl hover:shadow-2xl transition-all group flex flex-col"
-                >
-                  <div className="h-44 sm:h-56 overflow-hidden relative">
-                    <img
-                      src={guide.image}
-                      alt={guide.plant}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-4 sm:p-6">
-                      <h3 className="text-white text-xl sm:text-2xl font-black tracking-tight">{guide.plant}</h3>
-                    </div>
-                  </div>
-                  <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
-                    <div className="space-y-2 sm:space-y-3">
-                      {guide.tips.map((tip, i) => (
-                        <div key={i} className="flex items-start gap-2.5">
-                          <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mt-0.5 shrink-0" />
-                          <span className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 font-medium">{tip}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <button className="mt-6 sm:mt-8 w-full py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white font-black text-[10px] sm:text-sm uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all shadow-md active:scale-95">
-                      Explore Full Guide
-                    </button>
-                  </div>
+            <div className="space-y-6 md:space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-500">
+              {/* Header for Healthy Guide */}
+              <div className="text-center max-w-2xl mx-auto px-4">
+                <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 mb-6 shadow-inner">
+                  <Sparkles className="h-8 w-8" />
                 </div>
-              ))}
+                <h2 className="text-3xl md:text-5xl font-black text-zinc-800 dark:text-zinc-100 tracking-tight mb-4">
+                  🌾 Healthy Plant Guide
+                </h2>
+                <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                  This section includes ideal conditions and best practices for maintaining healthy plants.
+                </p>
+              </div>
+
+              {/* Sub-sections Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
+                {healthyPlantSections.map((section, idx) => {
+                  const Icon = section.icon
+                  return (
+                    <div 
+                      key={section.id}
+                      className={cn(
+                        "group p-6 md:p-8 rounded-[2.5rem] bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-xl hover:shadow-emerald-500/5 transition-all duration-500 flex flex-col relative overflow-hidden",
+                        `hover:border-${section.color}-500/30`
+                      )}
+                    >
+                      <div className="flex items-start justify-between mb-8">
+                        <div className={cn(
+                          "h-14 w-14 rounded-2xl flex items-center justify-center text-3xl shadow-sm transition-transform group-hover:scale-110 group-hover:rotate-6 duration-500",
+                          `bg-${section.color}-50 dark:bg-${section.color}-900/20`
+                        )}>
+                          {section.emoji}
+                        </div>
+                        <div className={cn(
+                          "p-2 rounded-full border opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-500",
+                          `border-${section.color}-200 dark:border-${section.color}-800`
+                        )}>
+                          <ArrowRight className={cn("h-4 w-4", `text-${section.color}-500`)} />
+                        </div>
+                      </div>
+
+                      <div className="mb-4">
+                        <h3 className="text-xl md:text-2xl font-black text-zinc-800 dark:text-zinc-100 mb-2">
+                          {section.title}
+                        </h3>
+                        <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 font-medium">
+                          {section.description}
+                        </p>
+                      </div>
+
+                      <div className="mt-auto pt-6 border-t border-zinc-50 dark:border-zinc-800 space-y-3">
+                        {section.items.map((item, i) => (
+                          <div key={i} className="flex items-center gap-3">
+                            <div className={cn("h-2 w-2 rounded-full", `bg-${section.color}-500`)} />
+                            <span className="text-sm md:text-base font-bold text-zinc-700 dark:text-zinc-300">
+                              {item}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Subtle accent line */}
+                      <div className={cn(
+                        "absolute top-0 right-0 w-24 h-24 blur-3xl opacity-0 group-hover:opacity-20 transition-opacity pointer-events-none",
+                        `bg-${section.color}-500`
+                      )} />
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           )}
         </div>
