@@ -16,7 +16,9 @@ import {
   Sprout,
   Info,
   Layers,
-  Scissors
+  Scissors,
+  SearchCheck,
+  Stethoscope
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -92,22 +94,44 @@ export default function GuidePage() {
 
   const commonProblems = [
     {
-      name: "Yellowing Leaves",
-      cause: "Overwatering or Nutrient Deficiency",
-      solution: "Check soil moisture; if wet, let it dry. If dry, try a balanced liquid fertilizer.",
-      severity: "Medium"
+      title: "Yellow Leaves",
+      emoji: "🟡",
+      color: "amber",
+      cause: "Overwatering or Lack of Sunlight",
+      solution: "Allow soil to dry completely before next watering and move to a brighter spot.",
+      signs: ["Pale foliage", "Wilting despite wet soil", "Soft stems"]
     },
     {
-      name: "Brown Crispy Edges",
-      cause: "Low Humidity or Underwatering",
-      solution: "Increase misting or use a pebble tray. Check watering frequency.",
-      severity: "Low"
+      title: "Brown / Dry Leaves",
+      emoji: "🍂",
+      color: "orange",
+      cause: "Underwatering or Low Humidity",
+      solution: "Increase watering frequency and mist the leaves daily or use a pebble tray.",
+      signs: ["Crispy edges", "Curling leaves", "Dropping old leaves"]
     },
     {
-      name: "Powdery Mildew",
-      cause: "Fungal Infection",
-      solution: "Increase air circulation and use a neem oil spray or fungicide.",
-      severity: "High"
+      title: "Pest Attack (aphids, insects)",
+      emoji: "🐛",
+      color: "red",
+      cause: "Spider Mites, Aphids, or Mealybugs",
+      solution: "Wipe leaves with neem oil solution and isolate the plant from others.",
+      signs: ["Sticky residue", "Webbing", "Visible tiny moving dots"]
+    },
+    {
+      title: "Leaf Spots (fungus)",
+      emoji: "⚫",
+      color: "zinc",
+      cause: "Fungal or Bacterial Infection",
+      solution: "Remove affected leaves immediately and improve air circulation.",
+      signs: ["Dark circular spots", "Yellow halos", "Fuzzy texture on leaves"]
+    },
+    {
+      title: "Slow Growth",
+      emoji: "🌱",
+      color: "emerald",
+      cause: "Nutrient Deficiency or Small Pot",
+      solution: "Apply balanced fertilizer during growing season or repot into a larger vessel.",
+      signs: ["No new leaves", "Small foliage", "Roots growing out of drainage holes"]
     }
   ]
 
@@ -126,7 +150,7 @@ export default function GuidePage() {
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 pb-10 font-sans">
-      <div className="container mx-auto max-w-5xl px-2 xs:px-4 pt-8 pb-2 md:py-12">
+      <div className="container mx-auto max-w-5xl px-2 xs:px-4 py-8 md:py-12">
         {/* Compact Tab Switcher with visible names */}
         <div className="flex justify-center mb-8 md:mb-12">
           <div className="bg-zinc-200/50 dark:bg-zinc-800/50 p-1.5 rounded-2xl flex w-full max-w-md shadow-inner">
@@ -186,7 +210,7 @@ export default function GuidePage() {
                         <div className="relative group">
                           <div className={cn(
                             /* Slightly increased sizes for visibility */
-                            "w-22 h-22 xs:w-28 xs:h-28 sm:w-40 sm:h-40 md:w-64 md:h-64 rounded-full border-2 sm:border-8 md:border-[12px] border-white dark:border-zinc-800 shadow-xl flex items-center justify-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:rotate-3",
+                            "w-24 h-24 xs:w-28 xs:h-28 sm:w-40 sm:h-40 md:w-64 md:h-64 rounded-full border-2 sm:border-8 md:border-[12px] border-white dark:border-zinc-800 shadow-xl flex items-center justify-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:rotate-3",
                             tip.bgColor
                           )}>
                             <TipIcon className={cn("w-10 h-10 xs:w-12 xs:h-12 sm:w-20 sm:h-20 md:w-28 md:h-28 filter drop-shadow-md", tip.color)} strokeWidth={1.5} />
@@ -220,36 +244,83 @@ export default function GuidePage() {
                   )
                 })}
               </div>
-
             </div>
           )}
 
           {activeTab === "problems" && (
-            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-500">
-              {commonProblems.map((problem, idx) => (
-                <div
-                  key={idx}
-                  className="p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/50 transition-all shadow-lg hover:shadow-2xl group"
-                >
-                  <div className="flex items-center gap-4 sm:gap-6">
-                    <div className={cn(
-                      "h-12 w-12 sm:h-16 sm:w-16 rounded-[1rem] sm:rounded-[1.25rem] flex items-center justify-center transition-transform group-hover:rotate-12",
-                      problem.severity === "High" ? "bg-red-50 text-red-600" : "bg-amber-50 text-amber-600"
-                    )}>
-                      <AlertTriangle className="h-6 w-6 sm:h-8 sm:w-8" />
+            <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-500">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {commonProblems.map((problem, idx) => (
+                  <div
+                    key={idx}
+                    className={cn(
+                      "group p-6 sm:p-8 rounded-[2rem] bg-white dark:bg-zinc-900 border transition-all duration-500 shadow-lg hover:shadow-2xl overflow-hidden relative",
+                      `hover:border-${problem.color}-400/50`
+                    )}
+                  >
+                    {/* Background Decorative Emoji */}
+                    <div className="absolute -right-4 -bottom-4 text-7xl opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110 duration-700">
+                      {problem.emoji}
                     </div>
-                    <div>
-                      <h3 className="text-lg sm:text-2xl font-black text-zinc-800 dark:text-zinc-100">{problem.name}</h3>
-                      <p className="text-[10px] sm:text-sm text-zinc-500 font-medium">Potential Cause: {problem.cause}</p>
+
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className={cn(
+                        "h-14 w-14 rounded-2xl flex items-center justify-center text-3xl shadow-sm transition-transform group-hover:scale-110 duration-500",
+                        `bg-${problem.color}-100 dark:bg-${problem.color}-900/30`
+                      )}>
+                        {problem.emoji}
+                      </div>
+                      <div>
+                        <h3 className="text-xl sm:text-2xl font-black text-zinc-800 dark:text-zinc-100">{problem.title}</h3>
+                        <div className={cn(
+                          "h-1 w-12 rounded-full mt-1",
+                          `bg-${problem.color}-500/50`
+                        )} />
+                      </div>
+                    </div>
+
+                    {/* Problem Sections */}
+                    <div className="space-y-6 relative z-10">
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <SearchCheck className={cn("h-4 w-4", `text-${problem.color}-500`)} />
+                          <span className="text-xs font-black uppercase tracking-widest text-zinc-400">Potential Cause</span>
+                        </div>
+                        <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-medium">
+                          {problem.cause}
+                        </p>
+                      </div>
+
+                      <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Stethoscope className="h-4 w-4 text-emerald-500" />
+                          <span className="text-xs font-black uppercase tracking-widest text-emerald-600/80">Diagnostic Solution</span>
+                        </div>
+                        <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 italic leading-relaxed">
+                          "{problem.solution}"
+                        </p>
+                      </div>
+
+                      <div>
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className={cn("w-1.5 h-1.5 rounded-full", `bg-${problem.color}-500`)} />
+                          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Key Symptoms</span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {problem.signs.map((sign, i) => (
+                            <span 
+                              key={i} 
+                              className="px-3 py-1 rounded-full bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 text-[10px] font-bold text-zinc-500 dark:text-zinc-400"
+                            >
+                              {sign}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="mt-4 sm:mt-6 p-3 sm:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border-l-4 border-emerald-500">
-                    <p className="text-zinc-600 dark:text-zinc-400 italic text-xs sm:text-base leading-relaxed">
-                      "{problem.solution}"
-                    </p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
 
@@ -275,7 +346,7 @@ export default function GuidePage() {
                       {guide.tips.map((tip, i) => (
                         <div key={i} className="flex items-start gap-2.5">
                           <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mt-0.5 shrink-0" />
-                          <span className="text-sm text-zinc-600 dark:text-zinc-300 font-medium">{tip}</span>
+                          <span className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 font-medium">{tip}</span>
                         </div>
                       ))}
                     </div>
