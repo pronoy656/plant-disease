@@ -24,19 +24,42 @@ export default function CreatePage() {
     }
   }
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
+    if (!fileInputRef.current?.files?.[0] && !cameraInputRef.current?.files?.[0]) return
+
+    const file = fileInputRef.current?.files?.[0] || cameraInputRef.current?.files?.[0]
+    if (!file) return
+
     setIsAnalyzing(true)
-    // Simulate API call
-    setTimeout(() => {
-      setIsAnalyzing(false)
-      const isHealthy = Math.random() > 0.4
-      setResult({
-        status: isHealthy ? "healthy" : "diseased",
-        message: isHealthy
-          ? "Your plant looks healthy and vibrant! Keep up the good work."
-          : "Early signs of Leaf Spot detected. We recommend pruning affected leaves and improving air circulation."
+    setResult(null)
+
+    const formData = new FormData()
+    formData.append("img", file)
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        body: formData,
       })
-    }, 2000)
+
+      if (!response.ok) {
+        throw new Error("Failed to analyze image")
+      }
+
+      const data = await response.json()
+      setResult({
+        status: data.status,
+        message: data.message
+      })
+    } catch (error) {
+      console.error("Error analyzing image:", error)
+      setResult({
+        status: "diseased",
+        message: "Error connecting to the analysis server. Please make sure the backend is running."
+      })
+    } finally {
+      setIsAnalyzing(false)
+    }
   }
 
   const reset = () => {
